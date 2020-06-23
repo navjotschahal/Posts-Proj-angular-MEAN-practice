@@ -1,8 +1,8 @@
 {
     "data": [
-        { "title": "First Post", "content": "This is first post's content." },
-        { "title": "Second Post", "content": "This is second post's content." },
-        { "title": "Third Post", "content": "This is third post's content." },
-        { "title": "Fourth Post", "content": "This is fourth post's content." }
+        { "title": "First Post", "content": "This is first post's content.", "id": 0 },
+        { "title": "Second Post", "content": "This is second post's content.", "id": 1 },
+        { "title": "Third Post", "content": "This is third post's content.", "id": 2 },
+        { "title": "Fourth Post", "content": "This is fourth post's content.", "id": 3 }
     ]
 }

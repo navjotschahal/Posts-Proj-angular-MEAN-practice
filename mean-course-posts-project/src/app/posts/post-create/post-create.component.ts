@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Post } from '../interfaces/post.interface';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FetchPostsService } from '../services/fetch-posts.service';
 
 @Component({
   selector: 'app-post-create',
@@ -7,16 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PostCreateComponent implements OnInit {
 
-  enteredValue = '';
-  newPost = 'No Content!';
+  createPostForm: FormGroup;
 
-  constructor() { }
+  constructor(private postService: FetchPostsService) { }
 
   ngOnInit(): void {
+    this.createPostForm = new FormGroup({
+      title: new FormControl('', [Validators.required]),
+      content: new FormControl('', [Validators.required])
+    });
   }
 
-  onAddPost() {
-    this.newPost = this.enteredValue;
+  onAddPost(): void {
+    const post: Post = this.createPostForm.value;
+    this.createPostForm.reset();
+    this.postService.addPost(post.title, post.content);
   }
 
 }

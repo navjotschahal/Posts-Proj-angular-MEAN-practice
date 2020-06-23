@@ -1,15 +1,40 @@
-<mat-accordion>
-  <mat-expansion-panel (opened)="panelOpenState = true"
-                       (closed)="panelOpenState = false"
-                       *ngFor=''>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Self aware panel
-      </mat-panel-title>
-      <mat-panel-description>
-        Currently I am {{panelOpenState ? 'open' : 'closed'}}
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <p>I'm visible because I am open</p>
-  </mat-expansion-panel>
-</mat-accordion>
+<mat-card>
+  <mat-card-title>
+    Post's list:
+  </mat-card-title>
+
+  <button mat-raised-button [color]="togglePostList ? 'warn' : 'accent'"
+    (click)='togglePostListFlag()' style="margin: 1rem; margin-left: auto;">
+    {{ togglePostList ? 'Toggle Post list' : 'View Post list'}}
+  </button>
+
+  <mat-card-content>
+    <mat-accordion *ngIf="postsList.length && togglePostList">
+      <mat-expansion-panel (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false"
+                           *ngFor="let post of postsList.slice().reverse()"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{post.title}}
+          </mat-panel-title>
+
+          <mat-panel-description>
+            Currently I am {{panelOpenState ? 'open' : 'closed'}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <p>{{post.content}}</p>
+
+        <mat-action-row>
+          <button mat-button color='primary'>EDIT</button>
+          <button mat-button color='warn'>DELETE</button>
+        </mat-action-row>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+
+</mat-card>
+
+<p class="info-text mat-body-1" *ngIf="postsList.length <= 0">No posts yet!</p>
