@@ -8,11 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from 'src/shared/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import { SpinnerComponent } from './common/components/spinner/spinner.component';
+import { WarningComponent } from './common/components/warning/warning.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    SpinnerComponent,
+    WarningComponent
   ],
   imports: [
     BrowserModule,
@@ -20,6 +24,10 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     SharedModule,
     HttpClientModule
+  ],
+  entryComponents: [
+    SpinnerComponent,
+    WarningComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
