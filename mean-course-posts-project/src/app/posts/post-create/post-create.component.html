@@ -4,7 +4,7 @@
     </mat-card-title>
 
     <mat-card-content>
-        <form [formGroup]="createPostForm" (ngSubmit)='onAddPost()'>
+        <form [formGroup]="createPostForm" (ngSubmit)='onSavePost()'>
             <mat-form-field>
                 <input type="text" placeholder="Title" matInput id="post-title"
                 formControlName='title'
@@ -13,6 +13,19 @@
                     {{ 'Enter title.' }}
                 </mat-error>
             </mat-form-field>
+
+            <div>
+                <button mat-icon-button color="primary" aria-label="Add Photo to your post."
+                    (click)='filePicker.click()' type="button"
+                >
+                    <mat-icon>add_photo_alternate</mat-icon>
+                </button>
+                <input type="file" #filePicker (change)='onPhotoSelected($event)'>
+            </div>
+
+            <div class="image-preview" *ngIf="photoPreviewUrl !== '' && photoPreviewUrl && createPostForm.get('photo').valid">
+                <img [src]="photoPreviewUrl" [alt]="createPostForm.value.title">
+            </div>
     
             <mat-form-field>
                 <textarea matInput placeholder="How you feeling today..." rows="7"

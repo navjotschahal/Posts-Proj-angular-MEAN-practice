@@ -5,6 +5,7 @@ import { StaticData } from 'src/assets/static-data/static.data';
 import { Observable, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { WarningComponent } from 'src/app/common/components/warning/warning.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-post-list',
@@ -37,6 +38,11 @@ export class PostListComponent implements OnInit, OnDestroy {
    */
   updatedPostsSub: Subscription;
 
+  totalPosts = 0;
+  postsPerPage = 2;
+  pageSizeOptions = [2, 4, 8, 16, 32, 64];
+  pageIndex = 1;
+
   constructor(
     private postsService: FetchPostsService,
     private matDialog: MatDialog
@@ -47,11 +53,12 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.postsService.fetchPosts();
+    this.postsService.fetchPosts(this.postsPerPage, this.pageIndex);
 
-    this.updatedPostsSub = this.postsService.getPostUpdateObservable().subscribe( (posts): void => {
-      const newPosts = posts;
-      this.postsList.push(...newPosts);
+    this.updatedPostsSub = this.postsService.getPostUpdateObservable().subscribe( (postData): void => {
+      const newPostData = postData;
+      this.postsList = [...newPostData.posts];
+      this.totalPosts = newPostData.totalPosts;
     });
   }
 
@@ -69,11 +76,25 @@ export class PostListComponent implements OnInit, OnDestroy {
       data: {message: 'Do yo want to delete this post?'}
     };
     const warnDialogRef = this.matDialog.open(WarningComponent, initialState);
-    warnDialogRef.afterClosed().subscribe(res => {
-      if (res) {
-        this.postsService.deletePost(postId);
+    warnDialogRef.afterClosed().subscribe((confirm: boolean) => {
+      if (confirm) {
+        this.postsService.deletePost(postId).subscribe(res => {
+          if (
+                res && res.data && res.data.deletedCount === 1
+                && res.data.n === 1 && res.data.ok === 1
+              ) {
+                this.postsService.fetchPosts(this.postsPerPage, this.pageIndex);
+              }
+        });
       }
     });
+  }
+
+  onChangedPage(pageEvent: PageEvent) {
+    this.pageIndex = pageEvent.pageIndex + 1;
+    this.postsPerPage = pageEvent.pageSize;
+    console.log(pageEvent);
+    this.postsService.fetchPosts(this.postsPerPage, this.pageIndex);
   }
 
 }

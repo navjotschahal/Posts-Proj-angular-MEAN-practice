@@ -12,7 +12,7 @@
     <mat-accordion *ngIf="postsList.length && togglePostList">
       <mat-expansion-panel (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false"
-                           *ngFor="let post of postsList.slice().reverse()"
+                           *ngFor="let post of postsList"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -24,15 +24,22 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
+        <div class="post-photo" *ngIf="post.photoPath !== '' && post.photoPath">
+          <img [src]="post.photoPath" [alt]="post.title">
+        </div>
         <p>{{post.content}}</p>
 
         <mat-action-row>
-          <button mat-button color='primary'>EDIT</button>
+          <a mat-button color='primary' [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active" >EDIT</a>
           <button mat-button color='warn' (click)='onDelete(post.id)'>DELETE</button>
         </mat-action-row>
 
       </mat-expansion-panel>
     </mat-accordion>
+    <mat-paginator [length]='totalPosts' (page)='onChangedPage($event)'
+              [pageSize]='postsPerPage'
+              [pageSizeOptions]='pageSizeOptions'>
+    </mat-paginator>
   </mat-card-content>
 
 </mat-card>

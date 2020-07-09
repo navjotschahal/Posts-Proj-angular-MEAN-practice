@@ -8,3 +8,9 @@ export interface DeleteOne {
     ok: number;
     deletedCount: number;
 }
+
+export interface ModifiedOne {
+    n: number;
+    ok: number;
+    nModified: number;
+}

@@ -8,6 +8,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
@@ -23,7 +25,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatToolbarModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule,
+    MatPaginatorModule
   ],
   exports: [
     FormsModule,
@@ -34,7 +38,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatToolbarModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule,
+    MatPaginatorModule
   ]
 })
 export class SharedModule { }

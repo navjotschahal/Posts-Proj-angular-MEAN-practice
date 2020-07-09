@@ -1,3 +1,13 @@
 <mat-toolbar color='primary'>
-    <h1 class="mat-headline">Posts App</h1>
+    <h1 class="mat-headline">
+        <a [routerLink]="['/']" routerLinkActive="router-link-active" >{{'My Posts'}}</a>
+    </h1>
+    <span class="spacer"></span>
+    <ul>
+        <li>
+            <a [routerLink]="['/create']" routerLinkActive="router-link-active" >
+                {{'New Post'}}
+            </a>
+        </li>
+    </ul>
 </mat-toolbar>

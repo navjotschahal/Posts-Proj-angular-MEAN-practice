@@ -1,7 +1,21 @@
 :host {
     display: block;
-    margin-top: 1rem;
+    margin: 1rem auto;
 }
+
 .info-text {
     text-align: center;
+}
+
+.post-photo {
+    width: 100%;
+}
+
+.post-photo img {
+    width: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
+}
+
+mat-paginator {
+    margin-top: 1rem;
 }

@@ -21,9 +21,12 @@ export class WebserviceService {
     const spinnerRef = this.spinner.start('Loading...');
     return this.http.get<any>(url).pipe(
       //  timeout(100000),
-      tap(() => {
+      tap(el => console.log('Process ' + el),
+      err => {
+        console.log(err);
         this.spinner.stop(spinnerRef);
-      })
+      },
+      () => this.spinner.stop(spinnerRef))
     );
   }
 
@@ -77,10 +80,22 @@ export class WebserviceService {
       });
     if (isBlob) {
       return this.http.get(url, { params, withCredentials: true, responseType: 'blob' })
-      .pipe(tap(() => this.spinner.stop(spinnerRef)));
+      .pipe(
+        tap(el => console.log('Process ' + el),
+      err => {
+        console.log(err);
+        this.spinner.stop(spinnerRef);
+      },
+      () => this.spinner.stop(spinnerRef))
+      );
     } else {
-      return this.http.get<any>(url, { params, withCredentials: true })
-      .pipe(tap(() => this.spinner.stop(spinnerRef)));
+      return this.http.get<any>(url, { params })
+      .pipe(tap(el => console.log('Process ' + el),
+      err => {
+        console.log(err);
+        this.spinner.stop(spinnerRef);
+      },
+      () => this.spinner.stop(spinnerRef)));
     }
   }
 
@@ -91,7 +106,14 @@ export class WebserviceService {
       params = params.append(key, paramsData[key]);
     });
     return this.http.post(url, null, { params, withCredentials: true })
-    .pipe(tap(() => this.spinner.stop(spinnerRef)));
+    .pipe(
+      tap(el => console.log('Process ' + el),
+      err => {
+        console.log(err);
+        this.spinner.stop(spinnerRef);
+      },
+      () => this.spinner.stop(spinnerRef))
+    );
   }
 
     postRequestWithParamsandBody(url: string, body: any, paramsData: any): Observable<any> {
@@ -106,13 +128,20 @@ export class WebserviceService {
 
       });
 
-      return this.http.post(url, body, { params, withCredentials: true })
+      return this.http.post(url, body, { params })
 
-        .pipe(tap(() => this.spinner.stop(spinnerRef)));
+        .pipe(
+    tap(el => console.log('Process ' + el),
+      err => {
+        console.log(err);
+        this.spinner.stop(spinnerRef);
+      },
+      () => this.spinner.stop(spinnerRef))
+  );
 
     }
 
-    /**
+  /**
 
      * Method to update the record with parameters.
 
@@ -124,13 +153,27 @@ export class WebserviceService {
 
      */
 
-    putRequestWithParam(url: string, paramsData?: any): Observable<any> {
+    putRequestWithParamAndBody(url: string, body: any, paramsData?: any): Observable<any> {
 
-      const spinnerRef = this.spinner.start('Loading...');
+        let params = new HttpParams();
 
-      return this.http.put(url, null, { withCredentials: true })
+        const spinnerRef = this.spinner.start('Loading...');
+  
+        Object.keys(paramsData).forEach(key => {
+  
+          params = params.append(key, paramsData[key]);
+  
+        });
+      return this.http.put(url, body, { params })
 
-        .pipe(tap(() => this.spinner.stop(spinnerRef)));
+        .pipe(
+    tap(el => console.log('Process ' + el),
+      err => {
+        console.log(err);
+        this.spinner.stop(spinnerRef);
+      },
+      () => this.spinner.stop(spinnerRef))
+  );
 
     }
 

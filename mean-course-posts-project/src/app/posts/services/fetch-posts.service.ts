@@ -4,55 +4,121 @@ import { StaticData } from 'src/assets/static-data/static.data';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Post } from '../interfaces/post.interface';
-import { JSONData, DeleteOne } from 'src/app/common/interfaces/api-responses.interface';
+import { Post, PostRes, PostData } from '../interfaces/post.interface';
+import { JSONData, DeleteOne, ModifiedOne } from 'src/app/common/interfaces/api-responses.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FetchPostsService {
 
-  constructor(private webService: WebserviceService) { }
+  constructor(
+    private webService: WebserviceService,
+    private $router: Router
+  ) { }
 
   private posts: Post[] = [];
-  private postsUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<{ posts: Post[], totalPosts: number }>();
 
-  fetchPosts(): void {
-    this.webService.getRequest(StaticData.fetchPostsUrl)
-    .pipe(map((postData: JSONData<any[]>) => {
-      return postData.data.map( (post): Post => {
+  fetchPosts(postsPerPage: number, pageIndex: number): void {
+    const queryPayload = { postsPerPage, pageIndex };
+    this.webService.getRequestWithParams(StaticData.fetchPostsUrl, queryPayload, false)
+    .pipe(map((postData: JSONData<PostData>): { posts: Post[], maxPosts: number } => {
         return {
-          id: post._id,
-          title: post.title,
-          content: post.content
+          posts: postData.data.posts.map( (post: PostRes): Post => {
+            return {
+              id: post._id,
+              title: post.title,
+              content: post.content,
+              photoPath: post.photoPath
+            };
+          }),
+          maxPosts: postData.data.totalPosts
         };
-      });
-    }))
-    .subscribe( (posts: Post[]): void => {
-      const fetchedPosts: Post[] = posts && posts.length ? posts : [];
-      this.postsUpdated.next([...fetchedPosts]);
+      })
+    )
+    .subscribe( (postData): void => {
+      const fetchedPosts: Post[] = postData && postData.posts && postData.posts.length ? postData.posts : [];
+      this.posts = fetchedPosts;
+      this.postsUpdated.next({ posts: [...this.posts], totalPosts: postData.maxPosts });
     });
   }
 
-  getPostUpdateObservable(): Observable<Post[]> {
+  getPostUpdateObservable(): Observable<{ posts: Post[], totalPosts: number }> {
     return this.postsUpdated.asObservable();
   }
 
-  addPost(title: string, content: string): void {
-    const post = { title, content, id: null };
-    this.webService.postRequest(StaticData.fetchPostsUrl, post).subscribe( (res) => {
-      console.log(res.message);
+  addPost(title: string, content: string, photo: File): void {
+    const postData = new FormData();
+    postData.append('title', title);
+    postData.append('content', content);
+    postData.append('photo', photo, title);
+    this.webService.postRequest(StaticData.fetchPostsUrl, postData).subscribe( (res: JSONData<Post>) => {
+      // if (res && res.data) {
+      //   const post: Post = { title, content, id: res.data.id, photoPath: res.data.photoPath };
+      //   console.log(res);
+      //   this.posts.push(post);
+      //   this.postsUpdated.next([...this.posts]);
+      // }
+      this.$router.navigate(['/']);
     });
-    this.posts.push(post);
-    this.postsUpdated.next([...this.posts]);
   }
 
-  deletePost(id: string) {
-    this.webService.deleteRequest(StaticData.fetchPostsUrl + id).subscribe( (res: JSONData<DeleteOne>) => {
-      if (res && res.data && res.data.deletedCount === 1 && res.data.n === 1 && res.data.ok === 1) {
+  deletePost(id: string): Observable<JSONData<DeleteOne>> {
+    return this.webService.deleteRequest(StaticData.fetchPostsUrl + id);
+    // .subscribe( (res: JSONData<DeleteOne>) => {
+    //   if (
+    //     res && res.data && res.data.deletedCount === 1
+    //     && res.data.n === 1 && res.data.ok === 1
+    //   ) {
+    //     console.log(res.message, res.data);
+    //     const updatedPosts = this.posts.filter(post => {
+    //       return post.id !== id;
+    //     });
+    //     this.posts = updatedPosts;
+    //     this.postsUpdated.next([...this.posts]);
+    //   }
+    // });
+  }
+
+  updatepost(id: string, content: string, title: string, photo: File | string) {
+    let postData: FormData | Post;
+    if (typeof(photo) === 'object') {
+      postData = new FormData();
+      // postData.append('id', id);
+      postData.append('title', title);
+      postData.append('content', content);
+      postData.append('photo', photo);
+    } else {
+      postData = {
+        id, title, content, photoPath: photo
+      };
+    }
+    this.webService.putRequestWithParamAndBody(StaticData.fetchPostsUrl, postData, { id } )
+    .subscribe( (res: JSONData<ModifiedOne>) => {
+      if (
+        res && res.data && res.data.nModified === 1
+        && res.data.n === 1 && res.data.ok === 1
+      ) {
         console.log(res.message, res.data);
+        // const oldPostIndex = this.posts.findIndex(postEle => {
+        //   return postEle.id === id;
+        // });
+        // const updatedPosts = [...this.posts];
+        // const post: Post = {
+        //   id, title, content, photoPath: ''
+        // };
+        // updatedPosts[oldPostIndex] = post;
+        // this.posts = updatedPosts;
+        // this.postsUpdated.next([...this.posts]);
+        this.$router.navigate(['/']);
       }
     });
+  }
+
+  getLatestSnapOfPost(postId: string): Observable<JSONData<PostRes>> {
+    return this.webService.getRequestWithParams(StaticData.fetchPostsUrl, {id: postId}, false);
   }
 
 }
