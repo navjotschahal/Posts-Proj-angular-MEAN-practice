@@ -6,4 +6,6 @@ export class StaticData {
 
     public static loading = 'Loading...';
 
+    public static login = 'Login';
+
 }
