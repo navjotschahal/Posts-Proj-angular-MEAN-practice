@@ -8,4 +8,6 @@ export class StaticData {
 
     public static login = 'Login';
 
+    public static signUp = 'SignUp';
+
 }

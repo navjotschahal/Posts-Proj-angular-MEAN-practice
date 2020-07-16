@@ -5,12 +5,14 @@ const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
 const postsRoutes = require('./routes/posts-routes');
+const userRoutes = require('./routes/user-routes');
+const staticData = require('./static-data/static-data.json');
 
-mongoose.connect('mongodb://localhost:27017/node-angular-mean', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(staticData.mongoDbConnection.uris, staticData.mongoDbConnection.options.ConnectionOptions)
 .then(() => {
-console.log('Connected to Mongo DB.');
+console.log(staticData.mongoDbConnection.messages.sucess + staticData.strFormater.newLine + staticData.mongoDbConnection.messages.sucessSarcasm);
 }).catch(() => {
-    console.log('Connection to DB failed!');
+    console.log(staticData.mongoDbConnection.messages.failed + staticData.strFormater.newLine + staticData.mongoDbConnection.messages.failedSarcasm);
 });
 
 const Post = require('../backend/model-schemas/post');
@@ -30,5 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/posts/", postsRoutes);
+
+app.use("/api/user/", userRoutes);
 
 module.exports = app;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StaticData } from 'src/assets/static-data/static.data';
+import { PRIMITIVE_VALUE } from 'src/assets/constants/common-constants';
 
 @Component({
   selector: 'app-login',
@@ -17,14 +18,14 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.fb.group(
       {
-        userName: [ { value: null, disabled: false }, [ Validators.required, Validators.email ] ],
-        password: [ { value: null, disabled: false }, [ Validators.required ] ]
+        userName: [ { value: PRIMITIVE_VALUE.null, disabled: PRIMITIVE_VALUE.false }, [ Validators.required, Validators.email ] ],
+        password: [ { value: PRIMITIVE_VALUE.null, disabled: PRIMITIVE_VALUE.false }, [ Validators.required ] ]
       }
     );
   }
 
   onLogin() {
-
+    console.log('Login form : ', this.loginForm.value);
   }
 
 }
