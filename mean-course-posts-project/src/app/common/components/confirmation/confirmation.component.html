@@ -1,0 +1,12 @@
+<h2 matDialogTitle>{{ data && data.heading ? data.heading : ''}}</h2>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <!--
+    Note that you can pass in anything to the `matDialogClose` attribute. This also includes objects, arrays, etc.
+    Just make sure that you make it a property binding with those [] brackets
+    Example: <button mat-button [matDialogClose]="{'lol': true}">Cancel</button>
+  -->
+  <button mat-button [matDialogClose]='true' color="warn" cdkFocusInitial>{{ data.buttonName ? data.buttonName : 'ok' }}</button>
+</mat-dialog-actions>

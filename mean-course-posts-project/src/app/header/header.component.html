@@ -6,15 +6,25 @@
     </h1>
     <span class="spacer"></span>
     <ul>
-        <li>
+        <li *ngIf="isUserAuthenticated">
             <a mat-button [routerLink]="['/create']" [routerLinkActive]="['mat-accent']" >
                 {{'New Post'}}
             </a>
         </li>
-        <li>
+        <li *ngIf="!isUserAuthenticated">
             <a mat-button [routerLink]="['/auth/login']" [routerLinkActive]="['mat-accent']" >
                 {{'Login'}}
             </a>
+        </li>
+        <li *ngIf="!isUserAuthenticated">
+            <a mat-button [routerLink]="['/auth/signUp']" [routerLinkActive]="['mat-accent']" >
+                {{'SignUp'}}
+            </a>
+        </li>
+        <li *ngIf="isUserAuthenticated">
+            <button mat-button (click)='onLogout()' >
+                {{'Logout'}}
+            </button>
         </li>
     </ul>
 </mat-toolbar>

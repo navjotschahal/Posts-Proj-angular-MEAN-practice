@@ -1,25 +1,25 @@
 <mat-card >
     <mat-card-title>
-        {{staticDtata.login}}
+        {{staticDtata.signUp}}
     </mat-card-title>
 
     <mat-card-content>
-        <form [formGroup]="signUpForm" (ngSubmit)='onLogin()'>
+        <form [formGroup]="signUpForm" (ngSubmit)='onSignUp()'>
             <mat-form-field>
                 <input type="text" placeholder="Username" matInput id="username"
-                [formControlName]='signUp.formCtrl.userName' required
+                [formControlName]='staticDtata.signUpFormData.formCtrl.userName' required
                 >
-                <mat-error *ngIf="signUpForm.get(signUp.formCtrl.userName).invalid">
-                    {{ signUp.formErrMsg.userName }}
+                <mat-error *ngIf="signUpForm.get(staticDtata.signUpFormData.formCtrl.userName).invalid">
+                    {{ staticDtata.signUpFormData.formErrMsg.userName }}
                 </mat-error>
             </mat-form-field>
     
             <mat-form-field>
                 <input type="text" placeholder="Password" matInput id="password"
-                [formControlName]='signUp.formCtrl.password' required
+                [formControlName]='staticDtata.signUpFormData.formCtrl.password' required
                 >
-                <mat-error *ngIf="signUpForm.get(signUp.formCtrl.password).invalid">
-                    {{ signUp.formErrMsg.password }}
+                <mat-error *ngIf="signUpForm.get(staticDtata.signUpFormData.formCtrl.password).invalid">
+                    {{ staticDtata.signUpFormData.formErrMsg.password }}
                 </mat-error>
             </mat-form-field>
     

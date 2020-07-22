@@ -7,9 +7,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from 'src/shared/shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SpinnerComponent } from './common/components/spinner/spinner.component';
 import { WarningComponent } from './common/components/warning/warning.component';
+import { ConfirmationComponent } from './common/components/confirmation/confirmation.component';
+import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -27,9 +29,10 @@ import { WarningComponent } from './common/components/warning/warning.component'
   ],
   entryComponents: [
     SpinnerComponent,
-    WarningComponent
+    WarningComponent,
+    ConfirmationComponent
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

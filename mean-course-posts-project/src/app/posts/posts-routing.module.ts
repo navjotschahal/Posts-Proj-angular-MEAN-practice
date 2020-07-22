@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PostsComponent } from './posts.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { PostCreateComponent } from './post-create/post-create.component';
+import { AuthGuard } from '../auth/route-authguard/auth.guard';
 
 const routes: Routes = [
   {
@@ -12,20 +13,24 @@ const routes: Routes = [
   },
   {
     path: 'combined-view', // child route path
-    component: PostsComponent // child route component that the router renders
+    component: PostsComponent, // child route component that the router renders
+    canActivate: [ AuthGuard ]
   },
   {
     path: 'create',
-    component: PostCreateComponent
+    component: PostCreateComponent,
+    canActivate: [ AuthGuard ]
   },
   {
     path: 'edit/:postId',
-    component: PostCreateComponent
+    component: PostCreateComponent,
+    canActivate: [ AuthGuard ]
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class PostsRoutingModule { }

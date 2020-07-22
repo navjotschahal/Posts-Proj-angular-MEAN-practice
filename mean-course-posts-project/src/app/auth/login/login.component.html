@@ -7,19 +7,19 @@
         <form [formGroup]="loginForm" (ngSubmit)='onLogin()'>
             <mat-form-field>
                 <input type="text" placeholder="Username" matInput id="username"
-                formControlName='userName' required
+                [formControlName]='staticDtata.loginFormData.loginFormCtrl.userName' required
                 >
-                <mat-error *ngIf="loginForm.get('userName').invalid">
-                    {{ 'Enter User-Name. eg. user@example.com' }}
+                <mat-error *ngIf="loginForm.get(staticDtata.loginFormData.loginFormCtrl.userName).invalid">
+                    {{ staticDtata.loginFormData.loginFormErrMsg.userName }}
                 </mat-error>
             </mat-form-field>
     
             <mat-form-field>
                 <input type="text" placeholder="Password" matInput id="password"
-                formControlName='password' required
+                [formControlName]='staticDtata.loginFormData.loginFormCtrl.password' required
                 >
-                <mat-error *ngIf="loginForm.get('password').invalid">
-                    {{ 'Enter password.' }}
+                <mat-error *ngIf="loginForm.get(staticDtata.loginFormData.loginFormCtrl.password).invalid">
+                    {{ staticDtata.loginFormData.loginFormErrMsg.password }}
                 </mat-error>
             </mat-form-field>
     

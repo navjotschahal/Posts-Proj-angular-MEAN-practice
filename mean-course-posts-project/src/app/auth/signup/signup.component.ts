@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StaticData } from 'src/assets/static-data/static.data';
 import { PRIMITIVE_VALUE } from 'src/assets/constants/common-constants';
-import * as SignUpFormData from './signup.component.json';
+import { AuthService } from '../services/auth.service';
+import { AuthData } from '../interfaces/auth.interface';
 
 @Component({
   selector: 'app-signup',
@@ -10,24 +11,27 @@ import * as SignUpFormData from './signup.component.json';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-
   signUpForm: FormGroup;
   staticDtata = StaticData;
-  signUp = SignUpFormData;
 
-  constructor( private fb: FormBuilder) { }
+  constructor( private fb: FormBuilder, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group(
       {
-        userName: [ { value: PRIMITIVE_VALUE.null, disabled: PRIMITIVE_VALUE.false }, [ Validators.required, Validators.email ] ],
-        password: [ { value: PRIMITIVE_VALUE.null, disabled: PRIMITIVE_VALUE.false }, [ Validators.required ] ]
+        [StaticData.signUpFormData.formCtrl.userName]:
+          [ { value: PRIMITIVE_VALUE.null, disabled: PRIMITIVE_VALUE.false }, [ Validators.required, Validators.email ] ],
+        [StaticData.signUpFormData.formCtrl.password]:
+          [ { value: PRIMITIVE_VALUE.null, disabled: PRIMITIVE_VALUE.false }, [ Validators.required ] ]
       }
     );
   }
 
-  onLogin() {
+  onSignUp(): void {
+    if (this.signUpForm.invalid) { return; }
     console.log('SignUp form : ', this.signUpForm.value);
+    const signUpFormVal: AuthData = this.signUpForm.value;
+    this.authService.createUser(signUpFormVal.userName, signUpFormVal.password);tor
   }
 
 }

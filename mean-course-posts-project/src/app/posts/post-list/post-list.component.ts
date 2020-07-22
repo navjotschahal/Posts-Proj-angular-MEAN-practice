@@ -6,6 +6,8 @@ import { Observable, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { WarningComponent } from 'src/app/common/components/warning/warning.component';
 import { PageEvent } from '@angular/material/paginator';
+import { PRIMITIVE_VALUE } from 'src/assets/constants/common-constants';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-post-list',
@@ -43,13 +45,20 @@ export class PostListComponent implements OnInit, OnDestroy {
   pageSizeOptions = [2, 4, 8, 16, 32, 64];
   pageIndex = 1;
 
+  private $authStateListenerSub: Subscription;
+  public isUserAuthenticated: boolean;
+
   constructor(
     private postsService: FetchPostsService,
-    private matDialog: MatDialog
-  ) { }
+    private matDialog: MatDialog,
+    private authService: AuthService
+  ) {
+    this.isUserAuthenticated = PRIMITIVE_VALUE.false;
+  }
 
   ngOnDestroy(): void {
     this.updatedPostsSub.unsubscribe();
+    this.$authStateListenerSub.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -59,6 +68,11 @@ export class PostListComponent implements OnInit, OnDestroy {
       const newPostData = postData;
       this.postsList = [...newPostData.posts];
       this.totalPosts = newPostData.totalPosts;
+    });
+
+    this.$authStateListenerSub = this.authService.getAuthStateListener()
+    .subscribe((authState: boolean): void => {
+      this.isUserAuthenticated = authState ? authState : PRIMITIVE_VALUE.false;
     });
   }
 
@@ -77,6 +91,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     };
     const warnDialogRef = this.matDialog.open(WarningComponent, initialState);
     warnDialogRef.afterClosed().subscribe((confirm: boolean) => {
+      console.log(confirm);
       if (confirm) {
         this.postsService.deletePost(postId).subscribe(res => {
           if (
