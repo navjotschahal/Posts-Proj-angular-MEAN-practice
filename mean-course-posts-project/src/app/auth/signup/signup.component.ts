@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
     if (this.signUpForm.invalid) { return; }
     console.log('SignUp form : ', this.signUpForm.value);
     const signUpFormVal: AuthData = this.signUpForm.value;
-    this.authService.createUser(signUpFormVal.userName, signUpFormVal.password);tor
+    this.authService.createUser(signUpFormVal.userName, signUpFormVal.password);
   }
 
 }
