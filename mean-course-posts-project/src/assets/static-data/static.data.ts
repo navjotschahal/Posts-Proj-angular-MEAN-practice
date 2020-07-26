@@ -17,6 +17,9 @@ export class StaticData {
 
     public static signUp = 'SignUp';
 
+    public static createPostBtn = 'Add Post';
+    public static editPostBtn = 'Update Post';
+
     public static signUpFormData = SignUpData.signUpData.signUpForm;
 
     public static loginFormData = LoginData.loginData.loginForm;

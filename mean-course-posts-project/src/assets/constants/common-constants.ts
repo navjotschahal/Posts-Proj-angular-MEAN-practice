@@ -15,6 +15,7 @@ export const NUMERICAL_CONST = {
 export const LOCAL_STORAGE = {
     keys: {
         expiration: 'expiration',
-        token: 'token'
+        token: 'token',
+        authorisedUserId: 'authorisedUserId'
     }
 };

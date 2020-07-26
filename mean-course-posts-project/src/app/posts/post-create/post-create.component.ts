@@ -6,6 +6,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { mimeType } from 'src/app/common/validators/mime-type.validator';
 import { MatDialog } from '@angular/material/dialog';
 import { WarningComponent } from 'src/app/common/components/warning/warning.component';
+import { StaticData } from 'src/assets/static-data/static.data';
 
 enum mode {
   create = 'create',
@@ -19,9 +20,11 @@ enum mode {
 })
 export class PostCreateComponent implements OnInit {
 
-  private mode = mode.create;
+  public mode = mode.create;
+  public modeEnum: typeof mode = mode;
   postId: string = null;
   postToEdit: Post;
+  public staticDtata = StaticData;
 
   photoPreviewUrl: string;
 
@@ -46,7 +49,8 @@ export class PostCreateComponent implements OnInit {
               content: res.data.content,
               id: res.data._id,
               title: res.data.title,
-              photoPath: res.data.photoPath
+              photoPath: res.data.photoPath,
+              creator: res.data.creator
             };
             this.createPostForm.setValue({
               title: this.postToEdit.title,

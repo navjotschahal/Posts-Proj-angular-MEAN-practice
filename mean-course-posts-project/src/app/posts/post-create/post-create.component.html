@@ -23,8 +23,8 @@
                 <input type="file" #filePicker (change)='onPhotoSelected($event)'>
             </div>
 
-            <div class="image-preview" *ngIf="photoPreviewUrl !== '' && photoPreviewUrl && createPostForm.get('photo').valid">
-                <img [src]="photoPreviewUrl" [alt]="createPostForm.value.title">
+            <div class="image-preview">
+                <img [src]="photoPreviewUrl ? photoPreviewUrl : https://github.com/navjotschahal/Posts-Proj-angular-MEAN-practice/blob/nsc_Posts-basics-MEAN/mean-course-posts-project/src/assets/images/dummy-user/dummyUser.png" [alt]="createPostForm.value.title">
             </div>
     
             <mat-form-field>
@@ -38,7 +38,7 @@
             </mat-form-field>
     
             <button color='primary' id="add-post" mat-raised-button type="submit" [disabled]='createPostForm.invalid'>
-                Add Post
+                {{mode === modeEnum.edit ? staticDtata.editPostBtn : staticDtata.createPostBtn }}
             </button>
         </form>
         

@@ -46,7 +46,7 @@ router.post('/login', (req, res, next) => {
     .then(result => {
         if (!result) {
             return res.status(401).json({
-                message: 'Auth Failed!',
+                message: 'Auth Failed!, incorrect userName or password.',
                 data: req.body.userName
             });
         }
@@ -55,12 +55,12 @@ router.post('/login', (req, res, next) => {
             'screte-key-this-should-be-a-very-long-string-apa-dan-ne-karam-se-ka-ke-ki-sa-re-ga-ma-pa-dha-ni-sa-sampradan',
             { expiresIn: '1h' }
         );
-        return res.status(200).json({ token: token, expiresIn: 3600 });
+        return res.status(200).json({ token: token, expiresIn: 3600, authorisedUserId: fetchedUser._id });
     })
     .catch(err => {
         console.log(err);
         return res.status(401).json({
-            message: 'Auth Failed',
+            message: 'Auth Failed, err occued.',
             data: err
         });
     });

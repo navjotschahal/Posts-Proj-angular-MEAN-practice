@@ -33,7 +33,8 @@ router.post('', checkAuth, multer({ storage: storage }).single('photo') , (req, 
     const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        photoPath: url + '/images/photos/' + req.file.filename
+        photoPath: url + '/images/photos/' + req.file.filename,
+        creator: req.userData.userId
     });
     console.log(post);
     post.save().then( createdPost => {
@@ -106,10 +107,10 @@ router.get('', (req, res, next) => {
 });
 
 router.delete('/:id', checkAuth, (req, res, next) => {
-    Post.deleteOne({ _id: req.params.id }).then( result => {
+    Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then( result => {
         console.log(result);
-        res.status(200).json({
-            message: "Post deleted !",
+        res.status(result.deletedCount === 1 ? 200 : 401).json({ 
+            message: result.deletedCount === 1 ? 'Post has been Deleted! sucessfully.' : 'Unauthorised!',
             data: result
         });
     }).catch( exception => {
@@ -133,10 +134,10 @@ router.put('', checkAuth, multer({ storage: storage }).single('photo'), (req, re
         content: req.body.content,
         photoPath: photoPath
     });
-    Post.updateOne({_id: req.query.id}, post).then(result => {
+    Post.updateOne({_id: req.query.id, creator: req.userData.userId}, post).then(result => {
         console.log(result);
-        res.status(200).json({ 
-            message: 'Post has been Patched! sucessfully.',
+        res.status(result.nModified === 1 ? 200 : 401).json({ 
+            message: result.nModified === 1 ? 'Post has been Patched! sucessfully.' : 'Unauthorised!',
             data: result
         });
     })

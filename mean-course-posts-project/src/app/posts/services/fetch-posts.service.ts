@@ -7,15 +7,22 @@ import { map } from 'rxjs/operators';
 import { Post, PostRes, PostData } from '../interfaces/post.interface';
 import { JSONData, DeleteOne, ModifiedOne } from 'src/app/common/interfaces/api-responses.interface';
 import { Router } from '@angular/router';
+import { CommonDialogUtil } from 'src/app/common/utilities/common-dialog.util';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationComponent } from 'src/app/common/components/confirmation/confirmation.component';
+import { PRIMITIVE_VALUE } from 'src/assets/constants/common-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FetchPostsService {
 
+  private commonDialogs = CommonDialogUtil;
+
   constructor(
     private webService: WebserviceService,
-    private $router: Router
+    private $router: Router,
+    private matDialog: MatDialog
   ) { }
 
   private posts: Post[] = [];
@@ -27,11 +34,13 @@ export class FetchPostsService {
     .pipe(map((postData: JSONData<PostData>): { posts: Post[], maxPosts: number } => {
         return {
           posts: postData.data.posts.map( (post: PostRes): Post => {
+            console.log(post);
             return {
               id: post._id,
               title: post.title,
               content: post.content,
-              photoPath: post.photoPath
+              photoPath: post.photoPath,
+              creator: post.creator
             };
           }),
           maxPosts: postData.data.totalPosts
@@ -92,7 +101,7 @@ export class FetchPostsService {
       postData.append('photo', photo);
     } else {
       postData = {
-        id, title, content, photoPath: photo
+        id, title, content, photoPath: photo, creator: PRIMITIVE_VALUE.null
       };
     }
     this.webService.putRequestWithParamAndBody(StaticData.fetchPostsUrl, postData, { id } )
@@ -113,7 +122,11 @@ export class FetchPostsService {
         // this.posts = updatedPosts;
         // this.postsUpdated.next([...this.posts]);
         this.$router.navigate(['/']);
+      } else {
+        this.commonDialogs.confirmDialog(res.message, this.matDialog, ConfirmationComponent);
       }
+    }, error => {
+      this.commonDialogs.confirmDialog(error.error.message, this.matDialog, ConfirmationComponent);
     });
   }
 

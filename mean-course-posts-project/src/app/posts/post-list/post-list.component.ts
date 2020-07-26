@@ -8,6 +8,8 @@ import { WarningComponent } from 'src/app/common/components/warning/warning.comp
 import { PageEvent } from '@angular/material/paginator';
 import { PRIMITIVE_VALUE } from 'src/assets/constants/common-constants';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { CommonDialogUtil } from 'src/app/common/utilities/common-dialog.util';
+import { ConfirmationComponent } from 'src/app/common/components/confirmation/confirmation.component';
 
 @Component({
   selector: 'app-post-list',
@@ -47,6 +49,9 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   private $authStateListenerSub: Subscription;
   public isUserAuthenticated: boolean;
+  public userId: string;
+
+  private commonDialogs = CommonDialogUtil;
 
   constructor(
     private postsService: FetchPostsService,
@@ -62,6 +67,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.userId = this.authService.getUserId();
     this.postsService.fetchPosts(this.postsPerPage, this.pageIndex);
 
     this.updatedPostsSub = this.postsService.getPostUpdateObservable().subscribe( (postData): void => {
@@ -72,6 +78,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
     this.$authStateListenerSub = this.authService.getAuthStateListener()
     .subscribe((authState: boolean): void => {
+      this.userId = this.authService.getUserId();
       this.isUserAuthenticated = authState ? authState : PRIMITIVE_VALUE.false;
     });
   }
@@ -98,8 +105,12 @@ export class PostListComponent implements OnInit, OnDestroy {
                 res && res.data && res.data.deletedCount === 1
                 && res.data.n === 1 && res.data.ok === 1
               ) {
+                this.commonDialogs.confirmDialog(res.message, this.matDialog, ConfirmationComponent);
                 this.postsService.fetchPosts(this.postsPerPage, this.pageIndex);
               }
+        },
+        (error: { error: { message: string; }; }) => {
+          this.commonDialogs.confirmDialog(error.error.message, this.matDialog, ConfirmationComponent);
         });
       }
     });

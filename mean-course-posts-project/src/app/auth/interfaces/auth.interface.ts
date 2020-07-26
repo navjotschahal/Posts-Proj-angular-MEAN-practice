@@ -10,3 +10,9 @@ export interface AuthUserData {
     date: string;
     __v?: number;
 }
+
+export interface LoginRes {
+    token: string;
+    expiresIn: number;
+    authorisedUserId: string;
+}

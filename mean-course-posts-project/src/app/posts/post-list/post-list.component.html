@@ -3,12 +3,11 @@
     Post's list:
   </mat-card-title>
 
-  <button mat-raised-button [color]="togglePostList ? 'warn' : 'accent'"
+  <mat-card-content *ngIf="!(postsList.length <= 0)">
+    <button mat-raised-button [color]="togglePostList ? 'warn' : 'accent'"
     (click)='togglePostListFlag()' style="margin: 1rem; margin-left: auto;">
     {{ togglePostList ? 'Toggle Post list' : 'View Post list'}}
   </button>
-
-  <mat-card-content>
     <mat-accordion *ngIf="postsList.length && togglePostList">
       <mat-expansion-panel (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false"
@@ -29,7 +28,7 @@
         </div>
         <p>{{post.content}}</p>
 
-        <mat-action-row *ngIf="isUserAuthenticated">
+        <mat-action-row *ngIf="isUserAuthenticated && post.creator === userId">
           <a mat-button color='primary' [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active" >EDIT</a>
           <button mat-button color='warn' (click)='onDelete(post.id)'>DELETE</button>
         </mat-action-row>

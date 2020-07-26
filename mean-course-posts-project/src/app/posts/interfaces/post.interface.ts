@@ -3,6 +3,7 @@ export interface Post {
     title: string;
     content: string;
     photoPath: string;
+    creator: string;
 }
 
 export interface PostRes {
@@ -11,6 +12,7 @@ export interface PostRes {
     __v: number;
     _id: string;
     photoPath: string;
+    creator: string;
 }
 
 export interface PostData {
