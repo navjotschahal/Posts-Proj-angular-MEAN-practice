@@ -20,6 +20,7 @@ enum mode {
 })
 export class PostCreateComponent implements OnInit {
 
+  public dummyUserImagePath: string;
   public mode = mode.create;
   public modeEnum: typeof mode = mode;
   postId: string = null;
@@ -34,7 +35,9 @@ export class PostCreateComponent implements OnInit {
     public postService: FetchPostsService,
     public router: ActivatedRoute,
     private matDialog: MatDialog
-  ) { }
+  ) {
+    this.dummyUserImagePath = 'https://raw.githubusercontent.com/navjotschahal/Posts-Proj-angular-MEAN-practice/nsc_Posts-basics-MEAN/mean-course-posts-project/src/assets/images/dummy-user/dummyUser.png';
+  }
 
   ngOnInit(): void {
     this.createPostFormGoup();
