@@ -1,0 +1,15 @@
+{
+    "signUpData": {
+        "signUpForm": {
+            "formName": "signUpForm",
+            "formErrMsg": {
+                "password": "Enter a password!",
+                "userName": "Enter User-Name. eg. user@example.com"
+            },
+            "formCtrl": {
+                "password": "password",
+                "userName": "userName"
+            }
+        }
+    }
+}

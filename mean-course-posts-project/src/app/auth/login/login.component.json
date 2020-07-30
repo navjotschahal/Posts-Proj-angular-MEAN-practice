@@ -1,0 +1,15 @@
+{
+    "loginData": {
+        "loginForm": {
+            "loginFormCtrl": {
+                "password": "password",
+                "userName": "userName"
+            },
+            "loginFormErrMsg": {
+                "password": "Enter password.",
+                "userName": "Enter User-Name. eg. user@example.com"
+            },
+            "loginFormName": "loginForm"
+        }
+    }
+}
