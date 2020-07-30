@@ -1,3 +1,5 @@
+import { MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+
 export const PRIMITIVE_VALUE = {
     null: null,
     false: false,

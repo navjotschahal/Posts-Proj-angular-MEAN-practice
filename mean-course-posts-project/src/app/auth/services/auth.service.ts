@@ -78,10 +78,6 @@ export class AuthService {
         const expirationDate: Date = new Date(now.getTime() + tokenExpiresIn * NUMERICAL_CONST.thousand);
         this.saveAuthData(token, expirationDate, authUserId);
       }
-    },
-    (err) => {
-      this.commonDialogs.confirmDialog('Login failed!', this.matDialog, ConfirmationComponent);
-      console.log(err);
     });
   }
 
