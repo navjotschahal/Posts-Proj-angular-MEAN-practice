@@ -17,5 +17,22 @@
 
     "strFormater": {
         "newLine": "\n"
+    },
+
+    "routes": {
+        "postsRoutes": {
+            "routes": {
+                "postApost": "",
+                "getPosts": "",
+                "deletePost": "/:id",
+                "updateApost": ""
+            }
+        },
+        "userRoutes": {
+            "routes": {
+                "signUp": "/signUp",
+                "login": "/login"
+            }
+        }
     }
 }
